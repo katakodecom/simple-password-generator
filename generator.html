@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Simple Password Generator</title>
+    <meta name="description" content="Password generator like safari password suggestion">
+    <meta name="author" content="katakode">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://fonts.googleapis.com/css?family=Roboto+Mono" rel="stylesheet">
+
+    <!--<link rel="stylesheet" href="css/normalize.css">-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/skeleton/2.0.4/skeleton.min.css">
+    <!--<link rel="icon" type="image/png" href="images/favicon.png">-->
+    <style>
+        html, body {
+            font-family: 'Roboto Mono', monospace;
+        }
+    </style>
+</head>
+<body>
+<div class="container" id="app">
+    <div class="row">
+        <div class="ten column" style="margin-top: 5%">
+            <h4>Password Generator</h4>
+            <p>eg for 4 segments, with 3 chars per segment.<br/><strong>abc-def-ghi-jkl</strong></p>
+            <p>Disclaimer:
+                <br/>- This page is simple HTML + Javascript, no information/password will be stored on this server
+                <br/>- All process run on your local browser.
+                <br/>- The cryptographic security is not of my concern. I need simple easy to type password, but also provide some randomness.
+            </p>
+        </div>
+    </div>
+    <hr>
+    <div class="row">
+        <div class="three columns">
+            <label for="nSegment">Total Segment</label>
+            <input class="u-full-width" type="text" id="nSegment" v-model="totalSegment">
+        </div>
+        <div class="three columns">
+            <label for="nChar">Char per Segment</label>
+            <input class="u-full-width" type="text" id="nChar" v-model="charPerSegment">
+        </div>
+        <div class="three columns">
+            <label for="separator">Separator</label>
+            <input class="u-full-width" type="text" id="separator" v-model="separator">
+        </div>
+        <div class="three columns">
+            <label for="nChar">&nbsp;</label>
+            <button v-on:click="generate" type="button" class="button-primary" id="generate">Generate</button>
+        </div>
+    </div>
+    <hr>
+    <h4 v-for="pass in passwords">
+        {{pass}}
+    </h4>
+    <hr>
+    <footer>
+        <p>Copyright &copy; 2018 katakode.com</p>
+    </footer>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<script>
+    var app = new Vue({
+        el: '#app',
+        data: {
+            charPerSegment: 3,
+            totalSegment: 4,
+            separator: '-',
+            passwords: []
+        },
+        methods: {
+            generate: function () {
+                // 'I' removed, its similar to lowercase of 'L'
+                const chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHJKLMNOPQRSTUVWXYZ1234567890';
+                const segments = [];
+
+                for (let s=0; s<this.totalSegment; s++) {
+                    let segment = '';
+
+                    for (let c=0; c<this.charPerSegment; c++) {
+                        const char = chars.charAt(Math.floor(Math.random()*chars.length));
+                        segment += char;
+                    }
+                    segments.push(segment);
+                }
+
+                this.passwords.push(segments.join(this.separator));
+            }
+        }
+    })
+</script>
+</body>
+</html>
